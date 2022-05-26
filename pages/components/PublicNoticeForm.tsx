@@ -1,11 +1,24 @@
 import { Grid, Typography, Alert, TextField, Button } from "@mui/material";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import FormControl from "@mui/material/FormControl";
 import {
   formData,
   INPUT_TYPE,
   RESPONSE_TYPE,
 } from "../models/PublicNoticeFormModel";
+
+type IInputState = {
+  value: string;
+  update: Dispatch<SetStateAction<string>>;
+  errUpdate: Dispatch<SetStateAction<string>>;
+}
+
+type IInputStateMap = {
+  FULL_NAME: IInputState;
+  EMAIL: IInputState;
+  PUBLIC_NOTICE_MESSAGE: IInputState;
+}
+
 
 export default function PublicNoticeForm() {
   // URL for submitting the input form
@@ -29,7 +42,7 @@ export default function PublicNoticeForm() {
   // spliting up & abstracting my approach here, which is clunky for sure.
   // However it would be challenging if we still have to display a summary of errors outside of individual components.
   // An onErr hook on each component that syncs state could solve that though.
-  const inputStateMap = {
+  const inputStateMap: IInputStateMap = {
     FULL_NAME: {
       value: fullName,
       update: setFullName,

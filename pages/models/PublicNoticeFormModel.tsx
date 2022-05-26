@@ -1,4 +1,31 @@
-const formData = {
+type IValidationRule = {
+  regex: RegExp;
+  errMsg: string;
+}
+
+
+type IInputConfig = {
+  label: string,
+  validationRules: IValidationRule[];
+}
+
+type IPublicNoticeFormData = {
+  FULL_NAME: IInputConfig;
+  EMAIL: IInputConfig;
+  PUBLIC_NOTICE_MESSAGE: IInputConfig;
+}
+
+type IInputEnum = {
+  FULL_NAME: string;
+  EMAIL: string;
+  PUBLIC_NOTICE_MESSAGE: string;
+}
+
+type IResponseTypeMap = {
+  ERROR: string;
+}
+
+const formData: IPublicNoticeFormData = {
   FULL_NAME: {
     label: "Full Name",
     // https://stackoverflow.com/questions/2385701/regular-expression-for-first-and-last-name
@@ -34,13 +61,13 @@ const formData = {
   },
 };
 
-const INPUT_TYPE = {
+const INPUT_TYPE: IInputEnum = {
   FULL_NAME: "FULL_NAME",
   EMAIL: "EMAIL",
   PUBLIC_NOTICE_MESSAGE: "PUBLIC_NOTICE_MESSAGE",
 };
 
-const RESPONSE_TYPE = {
+const RESPONSE_TYPE: IResponseTypeMap = {
   ERROR: "error",
 };
 
