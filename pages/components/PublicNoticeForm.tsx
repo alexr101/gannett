@@ -19,6 +19,24 @@ type IInputStateMap = {
   PUBLIC_NOTICE_MESSAGE: IInputState;
 }
 
+  // should be in utils
+  const getCookieByName = (name) => {
+    // Another quick copy paste: https://stackoverflow.com/questions/10730362/get-cookie-by-name
+    if (typeof window === 'undefined') return;
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  // should be in utils
+  const saveOnCookie = (e, type) => {
+    // quick copy paste for an hour calculation https://stackoverflow.com/questions/3794989/how-to-set-a-cookie-to-expire-in-1-hour-in-javascript
+    let now = new Date();
+    let time = now.getTime();
+    time += 3600 * 1000;
+    now.setTime(time);
+    document.cookie = `${type}=${e.target.value}; expires=${now.toUTCString()}`;
+  }
 
 export default function PublicNoticeForm() {
   // URL for submitting the input form
@@ -27,13 +45,13 @@ export default function PublicNoticeForm() {
   const [formMessageType, setFormMessageType] = useState("");
   const [formMessage, setFormMessage] = useState("");
 
-  const [fullName, setFullName] = useState("");
+  const [fullName, setFullName] = useState(getCookieByName(INPUT_TYPE.FULL_NAME) || "");
   const [fullNameErr, setFullNameErr] = useState("");
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(getCookieByName(INPUT_TYPE.EMAIL) || "");
   const [emailErr, setEmailErr] = useState("");
 
-  const [publicNoticeMessage, setPublicNoticeMessage] = useState("");
+  const [publicNoticeMessage, setPublicNoticeMessage] = useState(getCookieByName(INPUT_TYPE.PUBLIC_NOTICE_MESSAGE) || "");
   const [publicNoticeMessageErr, setPublicNoticeMessageErr] = useState("");
 
   // Using to automate form validation. I'm sure there's a better way.
@@ -120,6 +138,7 @@ export default function PublicNoticeForm() {
 
   const onChange = (e, type) => {
     const inputState = inputStateMap[type];
+    saveOnCookie(e, type);
     inputState.update(e.target.value);
   };
 
@@ -146,7 +165,7 @@ export default function PublicNoticeForm() {
             onChange={(e) => {
               onChange(e, INPUT_TYPE.FULL_NAME);
             }}
-            error={fullNameErr}
+            error={!!fullNameErr}
             helperText={fullNameErr}
           />
           <TextField
@@ -154,7 +173,7 @@ export default function PublicNoticeForm() {
             value={email}
             label={formData.EMAIL.label}
             onChange={(e) => onChange(e, INPUT_TYPE.EMAIL)}
-            error={emailErr}
+            error={!!emailErr}
             helperText={emailErr}
           />
 
@@ -167,7 +186,7 @@ export default function PublicNoticeForm() {
             value={publicNoticeMessage}
             label={formData.PUBLIC_NOTICE_MESSAGE.label}
             onChange={(e) => onChange(e, INPUT_TYPE.PUBLIC_NOTICE_MESSAGE)}
-            error={publicNoticeMessageErr}
+            error={!!publicNoticeMessageErr}
             helperText={publicNoticeMessageErr}
           />
 
