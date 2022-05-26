@@ -1,5 +1,5 @@
 import { Container } from "@mui/material";
-import PublicNoticePage from "./pages/PublicNoticePage";
+import PublicNoticePage from "./containers/PublicNoticePage";
 
 export default function Home() {
   return (

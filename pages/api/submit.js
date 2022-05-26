@@ -10,7 +10,6 @@ export default function handler(req, res) {
     "text_body": "Gotham City Public Works is accepting sealed solicitations for a new drinking fountain."
   }
   */
-  console.log({ req });
   if (req.method === "POST") {
     const data = JSON.parse(req.body);
     if (
@@ -25,12 +24,13 @@ export default function handler(req, res) {
       data.text_body.length > 0
     ) {
       // debugging feedback
-      console.debug({ data });
       console.debug(`data payload: ${JSON.stringify(data)}`);
 
       // define filename and path
+      // made a couple of tweaks
+      // Date method was erroring
+      // Math round needed to prevent decimals in file names
       const epoch_date = Math.round(new Date().getTime() / 1000);
-      console.debug({ e: new Date().getTime(), epoch_date });
       const file_name = `customer_submission_${epoch_date}.json`;
       const base_path = path.join(
         process.cwd(),
@@ -49,13 +49,11 @@ export default function handler(req, res) {
         message: "information successfully submitted",
       });
     } else {
-      console.debug(`data payload 2: ${req.body}`);
       res
         .status(500)
         .json({ status: "error", message: "missing or incorrect data" });
     }
   } else {
-    console.debug(`data payload 3: ${req.body}`);
     res
       .status(500)
       .json({ status: "error", message: "request requirements not met" });

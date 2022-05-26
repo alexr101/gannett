@@ -4,7 +4,6 @@ import Head from "next/head";
 import { Container, Grid, Typography } from "@mui/material";
 
 export async function getServerSideProps(context) {
-  console.log("getServerSideProps");
   const base_path = path.join(process.cwd(), `/public/submissions`);
   const file_list = fs.readdirSync(base_path);
   let submissions = [];
@@ -36,7 +35,6 @@ export default function Submissions(props) {
   const submissions =
     props.submissions &&
     props.submissions.map((s) => {
-      console.log({ s });
       const parsed_date = parseEpoch(s.filename);
       return (
         <Grid key={parsed_date}>
