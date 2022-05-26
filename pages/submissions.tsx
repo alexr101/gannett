@@ -13,7 +13,7 @@ export async function getServerSideProps(context) {
       encoding: "utf8",
       flag: "r",
     });
-    submissions.push({
+    submissions.unshift({
       filename: file,
       content: JSON.parse(file_data),
     });
